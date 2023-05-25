@@ -7,13 +7,22 @@
 
 import UIKit
 
-class ViewController: UIViewController {
 
+
+class ViewController: UIViewController {
+    @IBOutlet weak var text_value: UILabel!
+    @IBOutlet weak var numberSelector: UISlider!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        text_value.text = "Chess Board Dimension: " + String(Int(numberSelector.value)) + " x " + String(Int(numberSelector.value))
+
     }
 
+    @IBAction func slider(_ sender: Any) {
+        text_value.text = "Chess Board Dimension: " +  String(Int(numberSelector.value)) + " x " + String(Int(numberSelector.value))
 
+    }
+    
 }
 
