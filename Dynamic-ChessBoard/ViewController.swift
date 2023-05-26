@@ -38,30 +38,51 @@ class ChessBoardViewController: UIViewController, UICollectionViewDelegate, UICo
 
     @IBOutlet weak var temp: UILabel!
     private var board: UICollectionView?
-    var d = 6
+    var d = 16
+    var count = 0
+    var row = 0 , col = 0
+    var colorFlag = false
     override func viewDidLoad() {
         super.viewDidLoad()
         let layout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
+        layout.estimatedItemSize = CGSize(width: (359/CGFloat(d))  , height: (359/CGFloat(d)) )
+        
         board = UICollectionView(frame: .zero, collectionViewLayout: layout)
         board?.delegate = self
         board?.dataSource = self
         board?.register(ChessBoardCell.self, forCellWithReuseIdentifier: ChessBoardCell.id)
         view.addSubview(board!)
-        board?.frame = CGRect(x: 0, y: 300, width: 350, height: 350)
         
         board?.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             board!.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             board!.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             board!.heightAnchor.constraint(equalToConstant: 360),
-            board!.widthAnchor.constraint(equalToConstant: 350)
+            board!.widthAnchor.constraint(equalToConstant: 360)
         ])
-
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChessBoardCell.id, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChessBoardCell", for: indexPath)
+
+        let chessRow = indexPath.row / d
+        if chessRow % 2 == 0 {
+            if indexPath.row % 2 == 0 {
+                 cell.backgroundColor = UIColor.lightGray
+            }else{
+                cell.backgroundColor = UIColor.black
+            }
+        } else{
+            if indexPath.row % 2 == 0 {
+                cell.backgroundColor = UIColor.black
+            }else{
+                cell.backgroundColor = UIColor.lightGray
+            }
+        }
+        
         return cell
     }
     
@@ -70,23 +91,14 @@ class ChessBoardViewController: UIViewController, UICollectionViewDelegate, UICo
     }
 
 }
-var wasB = true
 
 class ChessBoardCell: UICollectionViewCell {
     static let id = "ChessBoardCell"
     var hasPawn = false
-    
+    var row = 0
+    var col = 0
     override init(frame: CGRect) {
         super.init(frame: frame)
-        if !wasB {
-            self.backgroundColor = .black
-            wasB = true
-        }
-        else {
-            self.backgroundColor = .green
-            wasB = false
-        }
-        
     }
     
     required init?(coder: NSCoder) {
