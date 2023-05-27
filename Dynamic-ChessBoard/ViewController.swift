@@ -36,11 +36,15 @@ class ViewController: UIViewController {
 
 }
 
+var startingPointIsChosen = false
+var endingPointIsChosen = false
+
 
 class ChessBoardViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
     
-
+    @IBOutlet weak var check: UIButton!
+    
     @IBOutlet weak var temp: UILabel!
     private var board: UICollectionView?
     var d : Int = 0
@@ -50,6 +54,15 @@ class ChessBoardViewController: UIViewController, UICollectionViewDelegate, UICo
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // create the alert
+        let alert = UIAlertController(title: "Starting Point", message: "Choose a starting point to place the knight", preferredStyle: UIAlertController.Style.alert)
+
+        // add an action (button)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+
+        // show the alert
+        self.present(alert, animated: true, completion: nil)
+
         let layout = UICollectionViewFlowLayout()
         
         board = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -59,8 +72,11 @@ class ChessBoardViewController: UIViewController, UICollectionViewDelegate, UICo
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
         layout.estimatedItemSize = CGSize(width: (359/CGFloat(d))  , height: (359/CGFloat(d)) )
-        temp.text = String(d)
+        temp.text = "This is a " + String(d) + "x" + String(d) + " Chess Board"
         board?.translatesAutoresizingMaskIntoConstraints = false
+        if startingPointIsChosen {
+            
+        }
         view.addSubview(board!)
         
         NSLayoutConstraint.activate([
@@ -72,8 +88,9 @@ class ChessBoardViewController: UIViewController, UICollectionViewDelegate, UICo
 
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChessBoardCell", for: indexPath)
+    
+    internal func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChessBoardC", for: indexPath) as! ChessBoardCell
         if d % 2 == 0 {
             let chessRow = (indexPath.row ) / d
             if chessRow % 2 == 0 {
@@ -121,20 +138,58 @@ class ChessBoardViewController: UIViewController, UICollectionViewDelegate, UICo
         d = dim
     }
     
+    @IBAction func checkPressed(_ sender: Any) {
+        // create the alert
+        let alert = UIAlertController(title: "Starting Point", message: "Choose a starting point to place the knight", preferredStyle: UIAlertController.Style.alert)
 
+        // add an action (button)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+
+        // show the alert
+        self.present(alert, animated: true, completion: nil)
+
+
+    }
+    
 }
 
+
 class ChessBoardCell: UICollectionViewCell {
-    static let id = "ChessBoardCell"
+    static let id = "ChessBoardC"
     var hasPawn = false
     var row = 0
     var col = 0
+    var button = UIButton()
+    var ImgView = UIImageView()
+    var img = UIImage(named: "knight")
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
+        button.backgroundColor = UIColor(white: 1, alpha: 0)
+        button.frame = CGRect(x: 0, y: 0, width: self.frame.width , height: self.frame.height)
+        button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
+        ImgView.image = img
+        ImgView.frame = CGRect(x: 0, y: 0, width: self.frame.width , height: self.frame.height)
+        ImgView.isHidden = true
+        self.addSubview(ImgView)
+        self.addSubview(button)
     }
     
     required init?(coder: NSCoder) {
         fatalError()
     }
+    
+    @objc func buttonPressed() {
+        if startingPointIsChosen && !endingPointIsChosen{
+            self.backgroundColor = .green
+            endingPointIsChosen = true
+        }
+
+        if !startingPointIsChosen {
+            self.ImgView.isHidden = false
+            startingPointIsChosen = true
+        }
+    }
 }
+
 
