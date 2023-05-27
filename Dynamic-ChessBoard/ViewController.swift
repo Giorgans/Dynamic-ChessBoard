@@ -74,22 +74,42 @@ class ChessBoardViewController: UIViewController, UICollectionViewDelegate, UICo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChessBoardCell", for: indexPath)
-
-        let chessRow = indexPath.row / d
-        if chessRow % 2 == 0 {
-            if indexPath.row % 2 == 0 {
-                 cell.backgroundColor = UIColor.lightGray
-            }else{
-                cell.backgroundColor = UIColor.black
-            }
-        } else{
-            if indexPath.row % 2 == 0 {
-                cell.backgroundColor = UIColor.black
-            }else{
-                cell.backgroundColor = UIColor.lightGray
+        if d % 2 == 0 {
+            let chessRow = (indexPath.row ) / d
+            if chessRow % 2 == 0 {
+                if indexPath.row % 2 == 0 {
+                    cell.backgroundColor = UIColor.lightGray
+                }
+                else{
+                    cell.backgroundColor = UIColor.black
+                }
+            } else{
+                if indexPath.row % 2 == 0 {
+                    cell.backgroundColor = UIColor.black
+                }
+                else{
+                    cell.backgroundColor = UIColor.lightGray
+                }
             }
         }
-        
+        else {
+            let chessRow = (indexPath.section ) / d
+            if chessRow % 2 == 0 {
+                if indexPath.row % 2 == 0 {
+                    cell.backgroundColor = UIColor.lightGray
+                }
+                else{
+                    cell.backgroundColor = UIColor.black
+                }
+            } else{
+                if indexPath.row % 2 == 0 {
+                    cell.backgroundColor = UIColor.black
+                }
+                else{
+                    cell.backgroundColor = UIColor.lightGray
+                }
+            }
+        }
         return cell
     }
     
