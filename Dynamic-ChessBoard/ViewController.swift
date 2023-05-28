@@ -23,6 +23,8 @@ class ViewController: UIViewController {
     }
     
     @IBAction func buttonPressed(_ sender: Any) {
+        endingPointIsChosen = false
+        startingPointIsChosen = false
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
@@ -35,6 +37,14 @@ class ViewController: UIViewController {
     }
 
 }
+
+struct point {
+    var row = -1
+    var col = -1
+}
+
+var startPoint =  point()
+var endPoint =  point()
 
 var startingPointIsChosen = false
 var endingPointIsChosen = false
@@ -127,6 +137,9 @@ class ChessBoardViewController: UIViewController, UICollectionViewDelegate, UICo
                 }
             }
         }
+        cell.col = indexPath.row % d
+        cell.row = ( indexPath.row - cell.col )/d
+
         return cell
     }
     
@@ -139,16 +152,28 @@ class ChessBoardViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     @IBAction func checkPressed(_ sender: Any) {
-        // create the alert
-        let alert = UIAlertController(title: "Starting Point", message: "Choose a starting point to place the knight", preferredStyle: UIAlertController.Style.alert)
-
-        // add an action (button)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
-
-        // show the alert
-        self.present(alert, animated: true, completion: nil)
-
-
+        if !startingPointIsChosen {
+            // create the alert
+            let alert = UIAlertController(title: "Starting Point", message: "Choose a starting point to place the knight", preferredStyle: UIAlertController.Style.alert)
+            
+            // add an action (button)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+            
+            // show the alert
+            self.present(alert, animated: true, completion: nil)
+            
+        }
+        if !endingPointIsChosen {
+            // create the alert
+            let alert = UIAlertController(title: "Ending Point", message: "Choose an ending point to move the knight", preferredStyle: UIAlertController.Style.alert)
+            
+            // add an action (button)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+            
+            // show the alert
+            self.present(alert, animated: true, completion: nil)
+        }
+        print("( "+String(startPoint.row)+" ,  "+String(startPoint.col) + " )" + String(endPoint.row) + String(endPoint.col))
     }
     
 }
@@ -183,12 +208,19 @@ class ChessBoardCell: UICollectionViewCell {
         if startingPointIsChosen && !endingPointIsChosen{
             self.backgroundColor = .green
             endingPointIsChosen = true
+            endPoint.row = row
+            endPoint.col = col
+
         }
 
         if !startingPointIsChosen {
             self.ImgView.isHidden = false
             startingPointIsChosen = true
+            startPoint.row = row
+            startPoint.col = col
         }
+        
+        print("Row is: " + String(row) + " Col is: " + String(col))
     }
 }
 
