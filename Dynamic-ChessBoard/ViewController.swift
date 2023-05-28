@@ -25,6 +25,8 @@ class ViewController: UIViewController {
     @IBAction func buttonPressed(_ sender: Any) {
         endingPointIsChosen = false
         startingPointIsChosen = false
+        startPoint = point()
+        endPoint = point()
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
@@ -173,7 +175,80 @@ class ChessBoardViewController: UIViewController, UICollectionViewDelegate, UICo
             // show the alert
             self.present(alert, animated: true, completion: nil)
         }
-        print("( "+String(startPoint.row)+" ,  "+String(startPoint.col) + " )" + String(endPoint.row) + String(endPoint.col))
+        compute()
+    }
+    
+    func compute(){
+        if abs(startPoint.row - endPoint.row) > 6 || abs(startPoint.col - endPoint.col) > 6 {
+            // create the alert
+            let alert = UIAlertController(title: "Cannot reach there!", message: "Your knight is too far away from ending point, you cannot reach there in 3 moves", preferredStyle: UIAlertController.Style.alert)
+            
+            // add an action (button)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+            
+            // show the alert
+            self.present(alert, animated: true, completion: nil)
+
+        }
+        else {
+            findIt(row: startPoint.row,col: startPoint.col,path: Array(),count: 0,d: d)
+            if paths.isEmpty {
+                // create the alert
+                let alert = UIAlertController(title: "NO SOLUTION!", message: "It is imposible to get there in 3 moves", preferredStyle: UIAlertController.Style.alert)
+                
+                // add an action (button)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+                
+                // show the alert
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+
+    }
+    var paths: Array<Array<point>> = Array()
+    
+    func findIt(row: Int,col: Int,path: Array<point>,count: Int ,d: Int){
+        
+        if row == endPoint.row && col == endPoint.col {
+            paths.append(path)
+            return
+        }
+        if count == 3 {
+            return
+        }
+
+        if ((row - 2 ) >= 0) && ((col - 1 ) >= 0) {
+            findIt(row: row-2, col: col-1,path: path, count: count+1, d: d)
+            
+        }
+        if ((row - 2 ) >= 0) && ((col + 1 ) < d) {
+            findIt(row: row-2, col: col+1,path: path, count: count+1, d: d)
+
+        }
+        if ((row + 2 ) < d) && ((col - 1 ) >= 0) {
+            findIt(row: row+2, col: col-1,path: path ,count: count+1, d: d)
+
+        }
+        if ((row + 2 ) < 0) && ((col + 1 ) < d) {
+            findIt(row: row+2, col: col+1,path: path ,count: count+1, d: d)
+
+        }
+        if ((row - 1 ) >= 0) && ((col - 2 ) >= 0) {
+            findIt(row: row-1, col: col-2,path: path, count: count+1, d: d)
+
+        }
+        if ((row - 1 ) >= 0) && ((col + 2 ) < d) {
+            findIt(row: row-1, col: col+2,path: path, count: count+1, d: d)
+
+        }
+        if ((row + 1 ) < d) && ((col - 2 ) >= 0) {
+            findIt(row: row+1, col: col-2,path: path,count: count+1, d: d)
+
+        }
+        if ((row + 1 ) < 0) && ((col + 2 ) < d) {
+            findIt(row: row+1, col: col+2,path: path,count: count+1, d: d)
+
+        }
     }
     
 }
