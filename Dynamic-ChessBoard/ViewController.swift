@@ -25,8 +25,8 @@ class ViewController: UIViewController {
     @IBAction func buttonPressed(_ sender: Any) {
         endingPointIsChosen = false
         startingPointIsChosen = false
-        startPoint = point()
-        endPoint = point()
+        startPoint = point(row: -1,col: -1)
+        endPoint = point(row: -1,col: -1)
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
@@ -41,12 +41,17 @@ class ViewController: UIViewController {
 }
 
 struct point {
-    var row = -1
-    var col = -1
+    var row : Int
+    var col : Int
+    init(row: Int, col: Int) {
+        self.row = row
+        self.col = col
+    }
+
 }
 
-var startPoint =  point()
-var endPoint =  point()
+var startPoint =  point(row: -1,col: -1)
+var endPoint =  point(row: -1,col: -1)
 
 var startingPointIsChosen = false
 var endingPointIsChosen = false
@@ -180,77 +185,103 @@ class ChessBoardViewController: UIViewController, UICollectionViewDelegate, UICo
     
     func compute(){
         if abs(startPoint.row - endPoint.row) > 6 || abs(startPoint.col - endPoint.col) > 6 {
-            // create the alert
             let alert = UIAlertController(title: "Cannot reach there!", message: "Your knight is too far away from ending point, you cannot reach there in 3 moves", preferredStyle: UIAlertController.Style.alert)
             
-            // add an action (button)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
             
-            // show the alert
             self.present(alert, animated: true, completion: nil)
 
         }
         else {
-            findIt(row: startPoint.row,col: startPoint.col,path: Array(),count: 0,d: d)
-            if paths.isEmpty {
-                // create the alert
-                let alert = UIAlertController(title: "NO SOLUTION!", message: "It is imposible to get there in 3 moves", preferredStyle: UIAlertController.Style.alert)
-                
-                // add an action (button)
-                alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
-                
-                // show the alert
-                self.present(alert, animated: true, completion: nil)
-            }
-        }
+            
+                var f = findIt(row: startPoint.row,col: startPoint.col,count: 0,d: d)
+                if pathsEmpty {
+                    let alert = UIAlertController(title: "NO SOLUTION!", message: "It is imposible to get there in 3 moves", preferredStyle: UIAlertController.Style.alert)
+                    
+                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+                    
+                    self.present(alert, animated: true, completion: nil)
+                }
 
-    }
-    var paths: Array<Array<point>> = Array()
-    
-    func findIt(row: Int,col: Int,path: Array<point>,count: Int ,d: Int){
+                            
+            }
         
-        if row == endPoint.row && col == endPoint.col {
-            paths.append(path)
-            return
+    }
+    
+    var pathsEmpty = true
+    var paths: Array<Array<point>> = Array()
+    func findIt(row: Int,col: Int,count: Int ,d: Int) -> Bool {
+
+        if row == endPoint.row && col == endPoint.col
+        {
+            pathsEmpty = false
+            return true
         }
         if count == 3 {
-            return
+            return false
         }
-
+                
         if ((row - 2 ) >= 0) && ((col - 1 ) >= 0) {
-            findIt(row: row-2, col: col-1,path: path, count: count+1, d: d)
+            if findIt(row: row-2, col: col-1, count: count+1, d: d) {
+                if row != startPoint.row && col != startPoint.col {
+                    board!.cellForItem(at: IndexPath(row: (row*d) + col , section: 0))?.backgroundColor = .orange
+                }
+                if count > 0 { return true }
+            }
             
         }
         if ((row - 2 ) >= 0) && ((col + 1 ) < d) {
-            findIt(row: row-2, col: col+1,path: path, count: count+1, d: d)
-
+            if findIt(row: row-2, col: col+1, count: count+1, d: d) {
+                if row != startPoint.row && col != startPoint.col { board!.cellForItem(at: IndexPath(row: (row*d) + col , section: 0))?.backgroundColor = .orange }
+                if count > 0 { return true }
+            }
         }
         if ((row + 2 ) < d) && ((col - 1 ) >= 0) {
-            findIt(row: row+2, col: col-1,path: path ,count: count+1, d: d)
+            if findIt(row: row+2, col: col-1 ,count: count+1, d: d) {
+                if row != startPoint.row && col != startPoint.col { board!.cellForItem(at: IndexPath(row: (row*d) + col , section: 0))?.backgroundColor = .orange }
+                if count > 0 { return true }
 
+            }
+            
         }
-        if ((row + 2 ) < 0) && ((col + 1 ) < d) {
-            findIt(row: row+2, col: col+1,path: path ,count: count+1, d: d)
+        if ((row + 2 ) < d) && ((col + 1 ) < d) {
+            if findIt(row: row+2, col: col+1 ,count: count+1, d: d) {
+                if row != startPoint.row && col != startPoint.col { board!.cellForItem(at: IndexPath(row: (row*d) + col , section: 0))?.backgroundColor = .orange }
+                if count > 0 { return true }
 
+            }
         }
         if ((row - 1 ) >= 0) && ((col - 2 ) >= 0) {
-            findIt(row: row-1, col: col-2,path: path, count: count+1, d: d)
-
+            if findIt(row: row-1, col: col-2, count: count+1, d: d) {
+                if row != startPoint.row && col != startPoint.col { board!.cellForItem(at: IndexPath(row: (row*d) + col , section: 0))?.backgroundColor = .orange }
+                if count > 0 { return true }
+            }
+            
         }
         if ((row - 1 ) >= 0) && ((col + 2 ) < d) {
-            findIt(row: row-1, col: col+2,path: path, count: count+1, d: d)
+            if findIt(row: row-1, col: col+2, count: count+1, d: d) {
+                if row != startPoint.row && col != startPoint.col { board!.cellForItem(at: IndexPath(row: (row*d) + col , section: 0))?.backgroundColor = .orange }
+                if count > 0 { return true }
 
+            }
+            
         }
         if ((row + 1 ) < d) && ((col - 2 ) >= 0) {
-            findIt(row: row+1, col: col-2,path: path,count: count+1, d: d)
+            if findIt(row: row+1, col: col-2,count: count+1, d: d) {
+                if row != startPoint.row && col != startPoint.col { board!.cellForItem(at: IndexPath(row: (row*d) + col , section: 0))?.backgroundColor = .orange }
+                if count > 0 { return true }
 
+            }
         }
-        if ((row + 1 ) < 0) && ((col + 2 ) < d) {
-            findIt(row: row+1, col: col+2,path: path,count: count+1, d: d)
+        if ((row + 1 ) < d) && ((col + 2 ) < d) {
+            if findIt(row: row+1, col: col+2,count: count+1, d: d) {
+                if row != startPoint.row && col != startPoint.col { board!.cellForItem(at: IndexPath(row: (row*d) + col , section: 0))?.backgroundColor = .orange }
+                if count > 0 { return true }
 
+            }
         }
+        return false
     }
-    
 }
 
 
@@ -262,6 +293,7 @@ class ChessBoardCell: UICollectionViewCell {
     var button = UIButton()
     var ImgView = UIImageView()
     var img = UIImage(named: "knight")
+    var label = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -271,6 +303,9 @@ class ChessBoardCell: UICollectionViewCell {
         ImgView.image = img
         ImgView.frame = CGRect(x: 0, y: 0, width: self.frame.width , height: self.frame.height)
         ImgView.isHidden = true
+        label.text = ""
+        label.textColor = .black
+        self.addSubview(label)
         self.addSubview(ImgView)
         self.addSubview(button)
     }

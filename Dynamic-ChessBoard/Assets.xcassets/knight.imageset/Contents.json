@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "png-clipart-chess-pawn-computer-icons-bishop-knight-knight-chess.png",
+      "filename" : "kngt.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "png-clipart-chess-pawn-computer-icons-bishop-knight-knight-chess 1.png",
+      "filename" : "kngt 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "png-clipart-chess-pawn-computer-icons-bishop-knight-knight-chess 2.png",
+      "filename" : "kngt 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
