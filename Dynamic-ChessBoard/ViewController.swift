@@ -158,6 +158,9 @@ class ChessBoardViewController: UIViewController, UICollectionViewDelegate, UICo
         d = dim
     }
     
+    @IBAction func backPressed(_ sender: Any) {
+        dismiss(animated: true)
+    }
     @IBAction func checkPressed(_ sender: Any) {
         if !startingPointIsChosen {
             // create the alert
@@ -232,35 +235,45 @@ class ChessBoardViewController: UIViewController, UICollectionViewDelegate, UICo
         }
         if ((row - 2 ) >= 0) && ((col + 1 ) < d) {
             if findIt(row: row-2, col: col+1, count: count+1, d: d) {
-                if row != startPoint.row && col != startPoint.col { board!.cellForItem(at: IndexPath(row: (row*d) + col , section: 0))?.backgroundColor = .orange }
+                if row != startPoint.row && col != startPoint.col {
+                    board!.cellForItem(at: IndexPath(row: (row*d) + col , section: 0))?.backgroundColor = .orange
+                }
                 if count > 0 { return true }
             }
         }
         if ((row + 2 ) < d) && ((col - 1 ) >= 0) {
             if findIt(row: row+2, col: col-1 ,count: count+1, d: d) {
-                if row != startPoint.row && col != startPoint.col { board!.cellForItem(at: IndexPath(row: (row*d) + col , section: 0))?.backgroundColor = .orange }
+                if row != startPoint.row && col != startPoint.col {
+                    board!.cellForItem(at: IndexPath(row: (row*d) + col , section: 0))?.backgroundColor = .orange
+                }
                 if count > 0 { return true }
-
             }
-            
         }
         if ((row + 2 ) < d) && ((col + 1 ) < d) {
             if findIt(row: row+2, col: col+1 ,count: count+1, d: d) {
-                if row != startPoint.row && col != startPoint.col { board!.cellForItem(at: IndexPath(row: (row*d) + col , section: 0))?.backgroundColor = .orange }
+                if row != startPoint.row && col != startPoint.col {
+                    board!.cellForItem(at: IndexPath(row: (row*d) + col , section: 0))?.backgroundColor = .orange
+                }
                 if count > 0 { return true }
 
             }
         }
         if ((row - 1 ) >= 0) && ((col - 2 ) >= 0) {
             if findIt(row: row-1, col: col-2, count: count+1, d: d) {
-                if row != startPoint.row && col != startPoint.col { board!.cellForItem(at: IndexPath(row: (row*d) + col , section: 0))?.backgroundColor = .orange }
+                if row != startPoint.row && col != startPoint.col {
+
+                    board!.cellForItem(at: IndexPath(row: (row*d) + col , section: 0))?.backgroundColor = .orange
+                }
                 if count > 0 { return true }
             }
             
         }
         if ((row - 1 ) >= 0) && ((col + 2 ) < d) {
             if findIt(row: row-1, col: col+2, count: count+1, d: d) {
-                if row != startPoint.row && col != startPoint.col { board!.cellForItem(at: IndexPath(row: (row*d) + col , section: 0))?.backgroundColor = .orange }
+                if row != startPoint.row && col != startPoint.col {
+                    board!.cellForItem(at: IndexPath(row: (row*d) + col , section: 0))?.backgroundColor = .orange
+                    
+                }
                 if count > 0 { return true }
 
             }
@@ -268,14 +281,17 @@ class ChessBoardViewController: UIViewController, UICollectionViewDelegate, UICo
         }
         if ((row + 1 ) < d) && ((col - 2 ) >= 0) {
             if findIt(row: row+1, col: col-2,count: count+1, d: d) {
-                if row != startPoint.row && col != startPoint.col { board!.cellForItem(at: IndexPath(row: (row*d) + col , section: 0))?.backgroundColor = .orange }
+                if row != startPoint.row && col != startPoint.col {
+                    board!.cellForItem(at: IndexPath(row: (row*d) + col , section: 0))?.backgroundColor = .orange
+                }
                 if count > 0 { return true }
 
             }
         }
         if ((row + 1 ) < d) && ((col + 2 ) < d) {
             if findIt(row: row+1, col: col+2,count: count+1, d: d) {
-                if row != startPoint.row && col != startPoint.col { board!.cellForItem(at: IndexPath(row: (row*d) + col , section: 0))?.backgroundColor = .orange }
+                if row != startPoint.row && col != startPoint.col {
+                    board!.cellForItem(at: IndexPath(row: (row*d) + col , section: 0))?.backgroundColor = .orange }
                 if count > 0 { return true }
 
             }
